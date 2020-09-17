@@ -6,8 +6,8 @@ import _ from 'lodash'
 jest.useFakeTimers()
 describe('getIso', () => {
 })
-it('response is array', () => {
-  const dataPremiumSummary = {Countries: [
+it('response is array', async () => {
+  const dataCountries = [
     {
       "Country": "Guyana",
       "Slug": "guyana",
@@ -17,8 +17,8 @@ it('response is array', () => {
       "Country": "Tanzania, United Republic of",
       "Slug": "tanzania",
       "ISO2": "TZ"
-    }]}
-  const dataCountries = [{
+    }]
+  const dataPremiumSummary = {Countries: [{
     "CountryISO": "TZ",
     "Country": "Tanzania",
     "Continent": "Africa",
@@ -64,16 +64,13 @@ it('response is array', () => {
     "IncidenceRiskNewConfirmedPerHundredThousand": 6.229699999999999,
     "IncidenceRiskNewDeathsPerHundredThousand": 0.2543,
     "CaseFatalityRatio": 2.980132450331126
-  }]
+  }]}
   const mockGetPremiumSummary = jest.fn()
   const mockGetCountries = jest.fn()
   mockGetPremiumSummary.mockResolvedValueOnce(dataPremiumSummary)
   mockGetCountries.mockResolvedValueOnce(dataCountries)
-  const component = renderer.create(<HomeScreen getCountries={mockGetCountries} getPremiumSummary={mockGetPremiumSummary} />)
+  const component = await renderer.create(<HomeScreen getCountries={mockGetCountries} getPremiumSummary={mockGetPremiumSummary} />)
   const instance = component.getInstance()
-  const responseDataCheck = instance.getDataSearch(dataCountries, dataPremiumSummary.Countries, 'Tanzania')
-  if(_.isEmpty(responseDataCheck) || _.isEmpty(responseDataCheck[0])){
-    return
-  }
+  const responseDataCheck = instance.getDataSearch('Tanzania')
   expect(responseDataCheck[0].CountryISO).toMatch('TZ')
 })

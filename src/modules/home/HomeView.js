@@ -111,19 +111,20 @@ export default class HomeScreen extends Component {
   }
 
   updateSearch = (searchText) => {
-    const {reserveData, countries} = this.state
+    const {reserveData} = this.state
     if(_.isEmpty(searchText)){
       return this.setState({ search: searchText , data: reserveData})
     }
-    const dataSearch = this.getDataSearch(reserveData, countries, searchText)
+    const dataSearch = this.getDataSearch(searchText)
     return this.setState({ search: searchText , data: dataSearch})
   }
 
-  getDataSearch = (reserveData, countries, searchText) => {
+  getDataSearch = (searchText) => {
+    const {reserveData} = this.state
     if(_.isEmpty(reserveData)){
       return null
     }
-    const iso = this.getIso(countries, searchText)
+    const iso = this.getIso(searchText)
     if(_.isEmpty(iso)){
       return null
     }
@@ -150,7 +151,8 @@ export default class HomeScreen extends Component {
     return true
   }
 
-  getIso = (countries, searchText) => {
+  getIso = (searchText) => {
+    const {countries} = this.state
     if(_.isEmpty(countries)){
       return null
     }
